@@ -7,11 +7,10 @@
 //
 
 #import "ViewController.h"
-#import "KICapture.h"
+#import "KICodeScanView.h"
 
-@interface ViewController ()
-@property (nonatomic, strong) KICapture *capture;
-@property (nonatomic, strong) KIQRCode  *qrCode;
+@interface ViewController () <UIAlertViewDelegate>
+@property (nonatomic, strong) KICodeScanView *codeScanView;
 @end
 
 @implementation ViewController
@@ -19,45 +18,50 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGRect rect = CGRectMake(10, 10, 200, 100);
+    
+    self.codeScanView = [[KICodeScanView alloc] initWithFrame:self.view.bounds scanRect:rect];
+    [self.codeScanView setBorderWidth:2];
+    [self.codeScanView setBorderColor:[UIColor redColor]];
+    [self.view addSubview:self.codeScanView];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    CGRect rect = CGRectMake(10, 10, 200, 100);
     __weak ViewController *weakSelf = self;
-    [KIQRCode requestAccessForCamera:^(BOOL granted) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.capture addDevice:weakSelf.qrCode];
-            [weakSelf.qrCode setMetadataObjectTypes:[NSArray arrayWithObject:AVMetadataObjectTypeEAN13Code]];
-            [weakSelf.view.layer addSublayer:weakSelf.qrCode.previewLayer];
-            [weakSelf.qrCode.previewLayer setFrame:weakSelf.view.bounds];
-            [weakSelf.capture startRunning];
-            
-            [weakSelf.qrCode setCaptureDidOutputMetadataObjectsBlock:^(AVCaptureOutput *captureOutput, NSArray *metadataObjects, AVCaptureConnection *connection) {
-                
-                if ([metadataObjects count] > 0) {
-                    AVMetadataObject *obj = [metadataObjects firstObject];
-                    if ([obj isKindOfClass:[AVMetadataMachineReadableCodeObject class]]) {
-                        AVMetadataMachineReadableCodeObject *codeObject = (AVMetadataMachineReadableCodeObject *)obj;
-                        NSLog(@"%@", codeObject.stringValue);
-                    }
-                }
-                
-                
-            }];
-        });
-        
+    
+//    [self.codeScanView.codeScanner setMetadataObjectTypesBlock:^NSArray *(KICodeScanner *codeScanner) {
+//        return [NSArray arrayWithObject:AVMetadataObjectTypeEAN13Code];
+//    }];
+    
+    [self.codeScanView.codeScanner setRectOfInterestBlock:^CGRect(KICodeScanner *codeScanner) {
+        return rect;
     }];
+    
+    [self.codeScanView.codeScanner setCaptureDidOutputMetadataObjectsBlock:^(AVCaptureOutput *captureOutput, NSArray *metadataObjects, AVCaptureConnection *connection) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ([metadataObjects count] > 0) {
+                [weakSelf.codeScanView stopRunning];
+                
+                AVMetadataObject *obj = [metadataObjects firstObject];
+                if ([obj isKindOfClass:[AVMetadataMachineReadableCodeObject class]]) {
+                    AVMetadataMachineReadableCodeObject *codeObject = (AVMetadataMachineReadableCodeObject *)obj;
+                    NSLog(@"%@", codeObject.stringValue);
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:codeObject.stringValue delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                    [alertView show];
+                }
+            }
+        });
+    }];
+    
+    [self.codeScanView prepareToScan];
+    
+    [self.codeScanView startRunning];
 }
 
-- (KICapture *)capture {
-    if (_capture == nil) {
-        _capture = [[KICapture alloc] init];
-    }
-    return _capture;
-}
-
-- (KIQRCode *)qrCode {
-    if (_qrCode == nil) {
-        _qrCode = [[KIQRCode alloc] initWithPosition:KICameraPositionBack];
-        [_qrCode setVideoOrientation:AVCaptureVideoOrientationPortrait];
-    }
-    return _qrCode;
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self.codeScanView startRunning];
 }
 
 @end

@@ -164,11 +164,13 @@
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
-@interface KIQRCode () <AVCaptureMetadataOutputObjectsDelegate>
-@property (nonatomic, copy) KICaptureDidOutputMetadataObjectsBlock didOutputMetadataObjectsBlock;
+@interface KICodeScanner () <AVCaptureMetadataOutputObjectsDelegate>
+@property (nonatomic, copy) KIMetadataObjectTypesBlock              dataOutputMetadataObjectTypesBlock;
+@property (nonatomic, copy) KIRectOfInterestBlock                   dataOutputRectOfInterestBlock;
+@property (nonatomic, copy) KICaptureDidOutputMetadataObjectsBlock  didOutputMetadataObjectsBlock;
 @end
 
-@implementation KIQRCode
+@implementation KICodeScanner
 
 - (instancetype)init {
     if (self = [super initWithPosition:KICameraPositionBack]) {
@@ -183,17 +185,39 @@
 }
 
 - (void)setupWithPosition:(KICameraPosition)position {
+    __weak KICodeScanner *weakSelf = self;
+    [[NSNotificationCenter defaultCenter] addObserverForName:AVCaptureInputPortFormatDescriptionDidChangeNotification
+                                                      object:nil
+                                                       queue:[NSOperationQueue currentQueue]
+                                                  usingBlock:^(NSNotification *note) {
+                                                      if (weakSelf.dataOutputRectOfInterestBlock != nil) {
+                                                          CGRect rect = weakSelf.dataOutputRectOfInterestBlock(weakSelf);
+                                                          rect = [weakSelf.previewLayer metadataOutputRectOfInterestForRect:rect];
+                                                          if (CGRectIsEmpty(rect) == false) {
+                                                              AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[weakSelf dataOutput];
+                                                              [dataOutput setRectOfInterest:rect];
+                                                          }
+                                                      }
+                                                  }];
+    
     self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
     self.deviceInput = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:nil];
     
     AVCaptureMetadataOutput *metadataOutput = [[AVCaptureMetadataOutput alloc] init];
     self.dataOutput = metadataOutput;
-    [self setMetadataObjectTypes:[metadataOutput availableMetadataObjectTypes]];
     
     [self updateVideoOrientation];
 }
 
+#pragma mark AVCaptureMetadataOutputObjectsDelegate
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
+    if (self.didOutputMetadataObjectsBlock != nil) {
+        self.didOutputMetadataObjectsBlock(captureOutput, metadataObjects, connection);
+    }
+}
+
+#pragma mark Methods
 - (void)setSession:(AVCaptureSession *)session queue:(dispatch_queue_t)queue {
     AVCaptureDeviceInput *deviceInput = [self deviceInput];
     AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
@@ -218,39 +242,46 @@
 
     [dataOutput setMetadataObjectsDelegate:self queue:queue];
     
+    NSArray *metadataObjectTypes = nil;
+    if (self.dataOutputMetadataObjectTypesBlock != nil) {
+        metadataObjectTypes = self.dataOutputMetadataObjectTypesBlock(self);
+    }
+    if (metadataObjectTypes == nil) {
+        metadataObjectTypes = [dataOutput availableMetadataObjectTypes];
+    }
+    [dataOutput setMetadataObjectTypes:metadataObjectTypes];
+    
     AVCaptureVideoPreviewLayer *cameraPreviewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:session];
     [cameraPreviewLayer setVideoGravity:AVLayerVideoGravityResizeAspectFill];
     [self setPreviewLayer:cameraPreviewLayer];
 }
 
-- (void)setRectOfInterest:(CGRect)rect {
-    AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
-    [dataOutput setRectOfInterest:rect];
+- (void)setMetadataObjectTypesBlock:(KIMetadataObjectTypesBlock)block {
+    [self setDataOutputMetadataObjectTypesBlock:block];
+}
+
+- (void)setRectOfInterestBlock:(KIRectOfInterestBlock)block {
+    [self setDataOutputRectOfInterestBlock:block];
 }
 
 - (void)setCaptureDidOutputMetadataObjectsBlock:(KICaptureDidOutputMetadataObjectsBlock)block {
     [self setDidOutputMetadataObjectsBlock:block];
 }
 
-- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputMetadataObjects:(NSArray *)metadataObjects fromConnection:(AVCaptureConnection *)connection {
-    if (self.didOutputMetadataObjectsBlock != nil) {
-        self.didOutputMetadataObjectsBlock(captureOutput, metadataObjects, connection);
-    }
-}
-
+#pragma mark Getters & Setters
 - (NSArray *)metadataObjectTypes {
     AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
     return dataOutput.metadataObjectTypes;
 }
 
-- (void)setMetadataObjectTypes:(NSArray *)metadataObjectTypes {
-    AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
-    [dataOutput setMetadataObjectTypes:metadataObjectTypes];
-}
-
 - (NSArray *)availableMetadataObjectTypes {
     AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
     return [dataOutput availableMetadataObjectTypes];
+}
+
+- (CGRect)rectOfInterest {
+    AVCaptureMetadataOutput *dataOutput = (AVCaptureMetadataOutput *)[self dataOutput];
+    return dataOutput.rectOfInterest;
 }
 
 @end

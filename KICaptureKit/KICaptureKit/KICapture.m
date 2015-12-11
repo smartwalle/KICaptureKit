@@ -17,6 +17,7 @@
 @property (nonatomic, copy) KICaptureDidStartRunningBlock       didStartRunningBlock;
 @property (nonatomic, copy) KICaptureDidStopRunningBlock        didStopRunningBlock;
 
+@property (nonatomic, assign) BOOL statusBeforeHibernate;
 @end
 
 @implementation KICapture
@@ -36,12 +37,23 @@
                                                  selector:@selector(applicationWillResignActive:)
                                                      name:UIApplicationWillResignActiveNotification
                                                    object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(applicationDidBecomeActive:)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:nil];
     }
     return self;
 }
 
 - (void)applicationWillResignActive:(NSNotification *)notification {
+    self.statusBeforeHibernate = [self isRunning];
     [self stopRunning];
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    if (self.statusBeforeHibernate) {
+        [self startRunning];
+    }
 }
 
 - (void)setCaptureDidStartRunningBlock:(KICaptureDidStartRunningBlock)block {

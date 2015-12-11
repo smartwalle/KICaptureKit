@@ -67,16 +67,22 @@ typedef NS_ENUM(int, KICameraPosition) {
 @end
 
 ////////////////////////////////////////////////////////////////////////////////
-@interface KIQRCode : KICamera <KICaptreDevice>
+@class KICodeScanner;
+typedef NSArray*(^KIMetadataObjectTypesBlock) (KICodeScanner *codeScanner);
+typedef CGRect(^KIRectOfInterestBlock) (KICodeScanner *codeScanner);
 
-// 添加到 KICapture 之后才设置相应的 type
-@property(nonatomic, copy) NSArray *metadataObjectTypes;
+@interface KICodeScanner : KICamera <KICaptreDevice>
+
+@property(nonatomic, readonly) NSArray *metadataObjectTypes;
 
 @property(nonatomic, readonly) NSArray *availableMetadataObjectTypes;
 
-- (void)setCaptureDidOutputMetadataObjectsBlock:(KICaptureDidOutputMetadataObjectsBlock)block;
+@property(nonatomic, readonly) CGRect rectOfInterest;
 
-- (void)setRectOfInterest:(CGRect)rect;
+- (void)setMetadataObjectTypesBlock:(KIMetadataObjectTypesBlock)block;
+- (void)setRectOfInterestBlock:(KIRectOfInterestBlock)block;
+
+- (void)setCaptureDidOutputMetadataObjectsBlock:(KICaptureDidOutputMetadataObjectsBlock)block;
 
 @end
 
