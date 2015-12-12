@@ -15,9 +15,18 @@
 @implementation KIScanMaskView
 
 #pragma mark Lifecycle
+- (instancetype)init {
+    if (self = [super init]) {
+        [self setScanLineColor:[UIColor greenColor]];
+        [self setScanLineHeight:1.0f];
+    }
+    return self;
+}
+
 - (void)didMoveToWindow {
     [super didMoveToWindow];
     [self setBackgroundColor:[UIColor clearColor]];
+    [self addSubview:self.scanLine];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -38,7 +47,7 @@
     CGFloat x = CGRectGetMinX(self.scanRect);
     CGFloat y = CGRectGetMinY(self.scanRect);
     CGSize size = self.scanRect.size;
-    [self.scanLine setFrame:CGRectMake(x, y, size.width, 2)];
+    [self.scanLine setFrame:CGRectMake(x, y, size.width, self.scanLineHeight)];
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
     [animation setDuration:1.5f];
@@ -56,17 +65,24 @@
     [self.scanLine.layer removeAnimationForKey:@"KICodeScanMaskViewScanAnimation"];
 }
 
+#pragma mark Methods
+- (void)updateScanLineFrame {
+    CGFloat x = CGRectGetMinX(self.scanRect);
+    CGFloat y = CGRectGetMinY(self.scanRect);
+    CGSize size = self.scanRect.size;
+    [self.scanLine setFrame:CGRectMake(x, y, size.width, self.scanLineHeight)];
+}
+
 #pragma mrak Getters & Setters
 - (UIImageView *)scanLine {
     if (_scanLine == nil) {
         _scanLine = [[UIImageView alloc] init];
-        [_scanLine setBackgroundColor:[UIColor colorWithRed:0 green:1 blue:0 alpha:0.5]];
-        [_scanLine.layer setShadowColor:[UIColor greenColor].CGColor];
-        [_scanLine.layer setShadowOpacity:1];
+        [_scanLine setBackgroundColor:[self.scanLineColor colorWithAlphaComponent:0.5]];
+        [_scanLine.layer setShadowColor:self.scanLineColor.CGColor];
+        [_scanLine.layer setShadowOpacity:2];
         [_scanLine.layer setShadowRadius:6];
         [_scanLine.layer setShadowOffset:CGSizeMake(0, 0)];
-        
-        [self addSubview:_scanLine];
+        [_scanLine setHidden:YES];
     }
     return _scanLine;
 }
@@ -89,6 +105,17 @@
 - (void)setBorderWidth:(CGFloat)borderWidth {
     _borderWidth = borderWidth;
     [self setNeedsDisplay];
+}
+
+- (void)setScanLineColor:(UIColor *)scanLineColor {
+    _scanLineColor = [scanLineColor copy];
+    [self.scanLine setBackgroundColor:[_scanLineColor colorWithAlphaComponent:0.5]];
+    [self.scanLine.layer setShadowColor:self.scanLineColor.CGColor];
+}
+
+- (void)setScanLineHeight:(CGFloat)scanLineHeight {
+    _scanLineHeight = scanLineHeight;
+    [self updateScanLineFrame];
 }
 
 @end

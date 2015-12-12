@@ -21,8 +21,8 @@
     CGRect rect = CGRectMake(10, 10, 200, 100);
     
     self.codeScanView = [[KICodeScanView alloc] initWithFrame:self.view.bounds scanRect:rect];
-    [self.codeScanView setBorderWidth:2];
-    [self.codeScanView setBorderColor:[UIColor redColor]];
+    [self.codeScanView.scanMaskView setBorderWidth:2];
+    [self.codeScanView.scanMaskView setBorderColor:[UIColor redColor]];
     [self.view addSubview:self.codeScanView];
 }
 

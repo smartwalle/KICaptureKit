@@ -17,6 +17,9 @@
 @property (nonatomic, assign) CGFloat borderWidth;
 @property (nonatomic, copy)   UIColor *borderColor;
 
+@property (nonatomic, assign) CGFloat scanLineHeight;
+@property (nonatomic, copy)   UIColor *scanLineColor;
+
 - (void)startAnimation;
 
 - (void)stopAnimation;

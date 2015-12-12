@@ -7,13 +7,12 @@
 //
 
 #import "KICodeScanView.h"
-#import "KIScanMaskView.h"
 
 @interface KICodeScanView ()
 @property (nonatomic, strong) KICapture      *capture;
 @property (nonatomic, strong) KICodeScanner  *codeScanner;
 @property (nonatomic, assign) CGRect         scanRect;
-@property (nonatomic, strong) KIScanMaskView *maskView;
+@property (nonatomic, strong) KIScanMaskView *scanMaskView;
 @property (nonatomic, weak)   CALayer        *previewLayer;
 @end
 
@@ -28,9 +27,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self addSubview:self.maskView];
+    [self addSubview:self.scanMaskView];
     [self.previewLayer setFrame:self.bounds];
-    [self.maskView setFrame:self.bounds];
+    [self.scanMaskView setFrame:self.bounds];
 }
 
 - (BOOL)prepareToScan {
@@ -41,12 +40,12 @@
 
 - (void)startRunning {
     [self.capture startRunning];
-    [self.maskView startAnimation];
+    [self.scanMaskView startAnimation];
 }
 
 - (void)stopRunning {
     [self.capture stopRunning];
-    [self.maskView stopAnimation];
+    [self.scanMaskView stopAnimation];
 }
 
 #pragma mark Getters & Setters
@@ -65,43 +64,27 @@
     return _codeScanner;
 }
 
-- (KIScanMaskView *)maskView {
-    if (_maskView == nil) {
-        _maskView = [[KIScanMaskView alloc] init];
-        [_maskView setMaskColor:[UIColor blackColor]];
+- (KIScanMaskView *)scanMaskView {
+    if (_scanMaskView == nil) {
+        _scanMaskView = [[KIScanMaskView alloc] init];
+        [_scanMaskView setMaskColor:[UIColor blackColor]];
     }
-    return _maskView;
+    return _scanMaskView;
 }
 
 - (void)setScanRect:(CGRect)scanRect {
-    [self.maskView setScanRect:scanRect];
+    [self.scanMaskView setScanRect:scanRect];
     [self setNeedsLayout];
 }
 
 - (CGRect)scanRect {
-    return [self.maskView scanRect];
+    return [self.scanMaskView scanRect];
 }
 
 - (void)setPreviewLayer:(CALayer *)previewLayer {
     _previewLayer = previewLayer;
     [previewLayer setFrame:self.bounds];
     [self.layer addSublayer:previewLayer];
-}
-
-- (void)setBorderColor:(UIColor *)borderColor {
-    [self.maskView setBorderColor:borderColor];
-}
-
-- (UIColor *)borderColor {
-    return self.maskView.borderColor;
-}
-
-- (void)setBorderWidth:(CGFloat)borderWidth {
-    [self.maskView setBorderWidth:borderWidth];
-}
-
-- (CGFloat)borderWidth {
-    return self.maskView.borderWidth;
 }
 
 @end

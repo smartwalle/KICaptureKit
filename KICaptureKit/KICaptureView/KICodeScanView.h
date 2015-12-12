@@ -7,13 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "KIScanMaskView.h"
 #import "KICapture.h"
 #import "KICaptureDevice.h"
 
 @interface KICodeScanView : UIView
-
-@property (nonatomic, assign) CGFloat borderWidth;
-@property (nonatomic, copy)   UIColor *borderColor;
 
 - (instancetype)initWithFrame:(CGRect)frame scanRect:(CGRect)scanRect;
 
@@ -22,5 +20,7 @@
 - (void)stopRunning;
 
 - (KICodeScanner *)codeScanner;
+
+- (KIScanMaskView *)scanMaskView;
 
 @end
