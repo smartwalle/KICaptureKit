@@ -12,6 +12,8 @@
 	<dict>
 		<key>39295A12951D9C483B448AAC8F06C149131BB28A</key>
 		<string>github.com:smartwalle/KICaptureKit.git</string>
+		<key>52E930DC430DBC8BFC8646B7DF88C94220B1E51C</key>
+		<string>gitlab.com:smoktech/provec.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>KICaptureKit.xcodeproj</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>39295A12951D9C483B448AAC8F06C149131BB28A</key>
 		<string>../..</string>
+		<key>52E930DC430DBC8BFC8646B7DF88C94220B1E51C</key>
+		<string>../../../../Workspace/Project/Provec</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>github.com:smartwalle/KICaptureKit.git</string>
@@ -35,6 +39,14 @@
 			<string>39295A12951D9C483B448AAC8F06C149131BB28A</string>
 			<key>IDESourceControlWCCName</key>
 			<string>KICaptureKit</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>52E930DC430DBC8BFC8646B7DF88C94220B1E51C</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Provec</string>
 		</dict>
 	</array>
 </dict>

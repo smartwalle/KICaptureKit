@@ -54,6 +54,7 @@
     [animation setRemovedOnCompletion:NO];
     [animation setFillMode:kCAFillModeBackwards];
     [animation setRepeatCount:HUGE_VALF];
+    [animation setAutoreverses:YES];
     [animation setFromValue:[NSValue valueWithCGPoint:self.scanLine.layer.position]];
     [animation setToValue:[NSValue valueWithCGPoint:CGPointMake(self.scanLine.layer.position.x, y+size.height-self.borderWidth)]];
     
