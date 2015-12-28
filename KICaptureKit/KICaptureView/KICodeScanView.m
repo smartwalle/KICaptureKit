@@ -12,8 +12,8 @@
 @property (nonatomic, strong) KICapture      *capture;
 @property (nonatomic, strong) KICodeScanner  *codeScanner;
 @property (nonatomic, assign) CGRect         scanRect;
-@property (nonatomic, strong) KIScanMaskView *scanMaskView;
 @property (nonatomic, weak)   CALayer        *previewLayer;
+@property (nonatomic, strong) UIView<KIScanMaskView> *scanMaskView;
 @end
 
 @implementation KICodeScanView
@@ -64,21 +64,8 @@
     return _codeScanner;
 }
 
-- (KIScanMaskView *)scanMaskView {
-    if (_scanMaskView == nil) {
-        _scanMaskView = [[KIScanMaskView alloc] init];
-        [_scanMaskView setMaskColor:[UIColor blackColor]];
-    }
-    return _scanMaskView;
-}
-
 - (void)setScanRect:(CGRect)scanRect {
-    [self.scanMaskView setScanRect:scanRect];
     [self setNeedsLayout];
-}
-
-- (CGRect)scanRect {
-    return [self.scanMaskView scanRect];
 }
 
 - (void)setPreviewLayer:(CALayer *)previewLayer {

@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KIScanMaskView : UIView
+@protocol KIScanMaskView <NSObject>
+@required
+- (void)startAnimation;
+- (void)stopAnimation;
+- (void)setScanRect:(CGRect)scanRect;
+- (CGRect)scanRect;
+@end
+
+@interface KIScanMaskView : UIView <KIScanMaskView>
 
 @property (nonatomic, assign) CGRect scanRect;
 

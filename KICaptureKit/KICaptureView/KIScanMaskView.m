@@ -17,6 +17,7 @@
 #pragma mark Lifecycle
 - (instancetype)init {
     if (self = [super init]) {
+        [self setMaskColor:[UIColor blackColor]];
         [self setScanLineColor:[UIColor greenColor]];
         [self setScanLineHeight:1.0f];
     }

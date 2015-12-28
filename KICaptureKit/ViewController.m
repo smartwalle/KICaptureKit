@@ -21,8 +21,13 @@
     CGRect rect = CGRectMake(10, 10, 200, 100);
     
     self.codeScanView = [[KICodeScanView alloc] initWithFrame:self.view.bounds scanRect:rect];
-    [self.codeScanView.scanMaskView setBorderWidth:2];
-    [self.codeScanView.scanMaskView setBorderColor:[UIColor redColor]];
+    
+    KIScanMaskView *maskView = [[KIScanMaskView alloc] init];
+    [maskView setBorderColor:[UIColor redColor]];
+    [maskView setBorderWidth:2];
+    [self.codeScanView setScanMaskView:maskView];
+    [maskView setScanRect:rect];
+    
     [self.view addSubview:self.codeScanView];
 }
 
@@ -31,9 +36,9 @@
     CGRect rect = CGRectMake(10, 10, 200, 100);
     __weak ViewController *weakSelf = self;
     
-//    [self.codeScanView.codeScanner setMetadataObjectTypesBlock:^NSArray *(KICodeScanner *codeScanner) {
-//        return [NSArray arrayWithObject:AVMetadataObjectTypeEAN13Code];
-//    }];
+    [self.codeScanView.codeScanner setMetadataObjectTypesBlock:^NSArray *(KICodeScanner *codeScanner) {
+        return [codeScanner availableMetadataObjectTypes];
+    }];
     
     [self.codeScanView.codeScanner setRectOfInterestBlock:^CGRect(KICodeScanner *codeScanner) {
         return rect;
