@@ -18,6 +18,8 @@
 		1894FFB61C19663000C88E98 /* KICapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 1894FFB11C19663000C88E98 /* KICapture.m */; };
 		1894FFB71C19663000C88E98 /* KICaptureDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 1894FFB31C19663000C88E98 /* KICaptureDevice.m */; };
 		1894FFB81C19663000C88E98 /* KIVideoEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 1894FFB51C19663000C88E98 /* KIVideoEncoder.m */; };
+		18AA637A1C30EE8300D80FBE /* scan_box@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18AA63791C30EE8300D80FBE /* scan_box@2x.png */; };
+		18AA637C1C30F0BB00D80FBE /* scan_line@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18AA637B1C30F0BB00D80FBE /* scan_line@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		1894FFB31C19663000C88E98 /* KICaptureDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KICaptureDevice.m; sourceTree = "<group>"; };
 		1894FFB41C19663000C88E98 /* KIVideoEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KIVideoEncoder.h; sourceTree = "<group>"; };
 		1894FFB51C19663000C88E98 /* KIVideoEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KIVideoEncoder.m; sourceTree = "<group>"; };
+		18AA63791C30EE8300D80FBE /* scan_box@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scan_box@2x.png"; sourceTree = "<group>"; };
+		18AA637B1C30F0BB00D80FBE /* scan_line@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "scan_line@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +124,8 @@
 		1894FF891C19662000C88E98 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				18AA63791C30EE8300D80FBE /* scan_box@2x.png */,
+				18AA637B1C30F0BB00D80FBE /* scan_line@2x.png */,
 				1894FF8A1C19662000C88E98 /* Info.plist */,
 				1894FF8B1C19662000C88E98 /* main.m */,
 				187CD2691C1A5646001A8A22 /* LaunchScreen.xib */,
@@ -238,7 +244,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				187CD26A1C1A5646001A8A22 /* LaunchScreen.xib in Resources */,
+				18AA637C1C30F0BB00D80FBE /* scan_line@2x.png in Resources */,
 				1894FF971C19662000C88E98 /* Images.xcassets in Resources */,
+				18AA637A1C30EE8300D80FBE /* scan_box@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,7 +21,6 @@
 
 - (KICodeScanner *)codeScanner;
 
-- (void)setScanMaskView:(UIView<KIScanMaskView> *)maskView;
-- (UIView<KIScanMaskView> *)scanMaskView;
+- (KIScanMaskView *)scanMaskView;
 
 @end

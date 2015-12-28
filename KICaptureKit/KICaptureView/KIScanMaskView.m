@@ -9,12 +9,13 @@
 #import "KIScanMaskView.h"
 
 @interface KIScanMaskView ()
+@property (nonatomic, retain) UIImageView   *borderImageView;
 @property (nonatomic, retain) UIImageView   *scanLine;
 @end
 
 @implementation KIScanMaskView
 
-#pragma mark Lifecycle
+#pragma mark - Lifecycle
 - (instancetype)init {
     if (self = [super init]) {
         [self setMaskColor:[UIColor blackColor]];
@@ -27,7 +28,15 @@
 - (void)didMoveToWindow {
     [super didMoveToWindow];
     [self setBackgroundColor:[UIColor clearColor]];
+    
     [self addSubview:self.scanLine];
+    [self addSubview:self.borderImageView];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self.borderImageView setImage:self.borderImage];
+    [self.borderImageView setFrame:self.scanRect];
 }
 
 - (void)drawRect:(CGRect)rect {
@@ -42,13 +51,13 @@
     CGContextClearRect(ctx, self.scanRect);
 }
 
-#pragma mark Methods
+#pragma mark - Methods
 - (void)startAnimation {
     [self.scanLine setHidden:NO];
     CGFloat x = CGRectGetMinX(self.scanRect);
     CGFloat y = CGRectGetMinY(self.scanRect);
     CGSize size = self.scanRect.size;
-    [self.scanLine setFrame:CGRectMake(x, y, size.width, self.scanLineHeight)];
+    [self.scanLine setFrame:CGRectMake(x, y + self.borderWidth - self.scanLineHeight * 0.5, size.width, self.scanLineHeight)];
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"position"];
     [animation setDuration:1.5f];
@@ -67,23 +76,34 @@
     [self.scanLine.layer removeAnimationForKey:@"KICodeScanMaskViewScanAnimation"];
 }
 
-#pragma mark Methods
 - (void)updateScanLineFrame {
     CGFloat x = CGRectGetMinX(self.scanRect);
-    CGFloat y = CGRectGetMinY(self.scanRect);
+    CGFloat y = CGRectGetMinY(self.scanRect) - self.scanLineHeight / 2;
     CGSize size = self.scanRect.size;
     [self.scanLine setFrame:CGRectMake(x, y, size.width, self.scanLineHeight)];
 }
 
-#pragma mrak Getters & Setters
+- (void)setScanLineDefaultStyle {
+    [_scanLine setBackgroundColor:[self.scanLineColor colorWithAlphaComponent:0.5]];
+    [_scanLine.layer setShadowColor:self.scanLineColor.CGColor];
+    [_scanLine.layer setShadowOpacity:2];
+    [_scanLine.layer setShadowRadius:6];
+    [_scanLine.layer setShadowOffset:CGSizeMake(0, 0)];
+}
+
+#pragma mrak - Getters & Setters
+- (UIImageView *)borderImageView {
+    if (_borderImageView == nil) {
+        _borderImageView = [[UIImageView alloc] init];
+        [_borderImageView setBackgroundColor:[UIColor clearColor]];
+    }
+    return _borderImageView;
+}
+
 - (UIImageView *)scanLine {
     if (_scanLine == nil) {
         _scanLine = [[UIImageView alloc] init];
-        [_scanLine setBackgroundColor:[self.scanLineColor colorWithAlphaComponent:0.5]];
-        [_scanLine.layer setShadowColor:self.scanLineColor.CGColor];
-        [_scanLine.layer setShadowOpacity:2];
-        [_scanLine.layer setShadowRadius:6];
-        [_scanLine.layer setShadowOffset:CGSizeMake(0, 0)];
+        [self setScanLineDefaultStyle];
         [_scanLine setHidden:YES];
     }
     return _scanLine;
@@ -109,6 +129,11 @@
     [self setNeedsDisplay];
 }
 
+- (void)setBorderImage:(UIImage *)borderImage {
+    _borderImage = [borderImage copy];
+    [self setNeedsLayout];
+}
+
 - (void)setScanLineColor:(UIColor *)scanLineColor {
     _scanLineColor = [scanLineColor copy];
     [self.scanLine setBackgroundColor:[_scanLineColor colorWithAlphaComponent:0.5]];
@@ -118,6 +143,21 @@
 - (void)setScanLineHeight:(CGFloat)scanLineHeight {
     _scanLineHeight = scanLineHeight;
     [self updateScanLineFrame];
+}
+
+- (void)setScanLineImage:(UIImage *)scanLineImage {
+    _scanLineImage = [scanLineImage copy];
+    [self.scanLine setImage:_scanLineImage];
+    
+    if (_scanLineImage != nil) {
+        [self.scanLine setBackgroundColor:[UIColor clearColor]];
+        [self.scanLine.layer setShadowColor:[UIColor clearColor].CGColor];
+        [self.scanLine.layer setShadowOpacity:0];
+        [self.scanLine.layer setShadowRadius:0];
+        [self.scanLine.layer setShadowOffset:CGSizeMake(0, 0)];
+    } else {
+        [self setScanLineDefaultStyle];
+    }
 }
 
 @end

@@ -8,15 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol KIScanMaskView <NSObject>
-@required
-- (void)startAnimation;
-- (void)stopAnimation;
-- (void)setScanRect:(CGRect)scanRect;
-- (CGRect)scanRect;
-@end
-
-@interface KIScanMaskView : UIView <KIScanMaskView>
+@interface KIScanMaskView : UIView
 
 @property (nonatomic, assign) CGRect scanRect;
 
@@ -24,9 +16,11 @@
 
 @property (nonatomic, assign) CGFloat borderWidth;
 @property (nonatomic, copy)   UIColor *borderColor;
+@property (nonatomic, copy)   UIImage *borderImage;
 
 @property (nonatomic, assign) CGFloat scanLineHeight;
 @property (nonatomic, copy)   UIColor *scanLineColor;
+@property (nonatomic, copy)   UIImage *scanLineImage;
 
 - (void)startAnimation;
 
