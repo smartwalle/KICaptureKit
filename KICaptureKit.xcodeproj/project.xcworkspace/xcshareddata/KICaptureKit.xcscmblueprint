@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "39295A12951D9C483B448AAC8F06C149131BB28A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "52E930DC430DBC8BFC8646B7DF88C94220B1E51C" : 0,
+    "39295A12951D9C483B448AAC8F06C149131BB28A" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "2E59D190-8C42-4113-813F-B60312C826AF",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "52E930DC430DBC8BFC8646B7DF88C94220B1E51C" : "Workspace\/Project\/Provec",
+    "39295A12951D9C483B448AAC8F06C149131BB28A" : "KICaptureKit"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KICaptureKit",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KICaptureKit.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:smartwalle\/KICaptureKit.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "39295A12951D9C483B448AAC8F06C149131BB28A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "gitlab.com:smoktech\/provec.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "52E930DC430DBC8BFC8646B7DF88C94220B1E51C"
+    }
+  ]
+}
