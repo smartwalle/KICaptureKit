@@ -136,7 +136,7 @@
     } else if ([captureOutput isKindOfClass:[AVCaptureAudioDataOutput class]]) {
         if(self.assetWriter.status > AVAssetWriterStatusWriting) {
 #ifdef DEBUG
-            NSLog(@"Warning: writer status is %d", self.assetWriter.status);
+            NSLog(@"Warning: writer status is %ld", self.assetWriter.status);
 #endif
             if (self.assetWriter.status == AVAssetWriterStatusFailed) {
 #ifdef DEBUG
