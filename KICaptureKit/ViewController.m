@@ -20,13 +20,18 @@
     
     CGRect rect = CGRectMake(10, 10, 200, 100);
     
-    self.codeScanView = [[KICodeScanView alloc] initWithFrame:self.view.bounds scanRect:rect];
-    [self.codeScanView.scanMaskView setBorderImage:[UIImage imageNamed:@"scan_box.png"]];
-    [self.codeScanView.scanMaskView setScanLineImage:[UIImage imageNamed:@"scan_line.png"]];
-    [self.codeScanView.scanMaskView setScanLineHeight:15];
-    [self.codeScanView.scanMaskView setBorderColor:[UIColor clearColor]];
-    
+    self.codeScanView = [[KICodeScanView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.codeScanView];
+    
+    KIScanMaskView *maskView = [[KIScanMaskView alloc] init];
+    [maskView setMaskColor:[UIColor redColor]];
+    [maskView setBorderImage:[UIImage imageNamed:@"scan_box.png"]];
+    [maskView setScanLineImage:[UIImage imageNamed:@"scan_line.png"]];
+    [maskView setScanLineHeight:15];
+    [maskView setBorderColor:[UIColor clearColor]];
+    [maskView setScanRect:rect];
+    [self.codeScanView setScanMaskView:maskView];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {

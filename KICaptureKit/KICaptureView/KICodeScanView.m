@@ -8,28 +8,34 @@
 
 #import "KICodeScanView.h"
 
-@interface KICodeScanView ()
+@interface KICodeScanView () {
+    CGRect         _scanRect;
+    KIScanMaskView *_scanMaskView;
+}
 @property (nonatomic, strong) KICapture      *capture;
 @property (nonatomic, strong) KICodeScanner  *codeScanner;
-@property (nonatomic, assign) CGRect         scanRect;
 @property (nonatomic, strong) KIScanMaskView *scanMaskView;
 @property (nonatomic, weak)   CALayer        *previewLayer;
 @end
 
 @implementation KICodeScanView
 
-- (instancetype)initWithFrame:(CGRect)frame scanRect:(CGRect)scanRect {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self setScanRect:scanRect];
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self addSubview:self.scanMaskView];
     [self.previewLayer setFrame:self.bounds];
     [self.scanMaskView setFrame:self.bounds];
+    
+    if (self.capture.isRunning) {
+        [self.scanMaskView startAnimation];
+    } else {
+        [self.scanMaskView stopAnimation];
+    }
 }
 
 - (BOOL)prepareToScan {
@@ -65,20 +71,13 @@
 }
 
 - (KIScanMaskView *)scanMaskView {
-    if (_scanMaskView == nil) {
-        _scanMaskView = [[KIScanMaskView alloc] init];
-        [_scanMaskView setMaskColor:[UIColor blackColor]];
-    }
     return _scanMaskView;
 }
 
-- (void)setScanRect:(CGRect)scanRect {
-    [self.scanMaskView setScanRect:scanRect];
+- (void)setScanMaskView:(KIScanMaskView *)scanMaskView {
+    _scanMaskView = scanMaskView;
+    [self addSubview:_scanMaskView];
     [self setNeedsLayout];
-}
-
-- (CGRect)scanRect {
-    return [self.scanMaskView scanRect];
 }
 
 - (void)setPreviewLayer:(CALayer *)previewLayer {

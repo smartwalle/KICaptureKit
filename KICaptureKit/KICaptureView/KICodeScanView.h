@@ -13,7 +13,7 @@
 
 @interface KICodeScanView : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame scanRect:(CGRect)scanRect;
+- (instancetype)initWithFrame:(CGRect)frame;
 
 - (BOOL)prepareToScan;
 - (void)startRunning;
@@ -22,5 +22,6 @@
 - (KICodeScanner *)codeScanner;
 
 - (KIScanMaskView *)scanMaskView;
+- (void)setScanMaskView:(KIScanMaskView *)scanMaskView;
 
 @end
