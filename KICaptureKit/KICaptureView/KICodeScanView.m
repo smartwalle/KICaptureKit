@@ -28,6 +28,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self bringSubviewToFront:self.scanMaskView];
     [self.previewLayer setFrame:self.bounds];
     [self.scanMaskView setFrame:self.bounds];
     
