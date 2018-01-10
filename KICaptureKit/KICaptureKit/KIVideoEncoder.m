@@ -54,10 +54,11 @@
 - (BOOL)startWriting {
     BOOL success = NO;
     if (self.assetWriter.status != AVAssetWriterStatusWriting && self.assetWriter.status != AVAssetWriterStatusFailed) {
-        if (CMTIME_IS_VALID(self.lastSampleTime)) {
+//        if (CMTIME_IS_VALID(self.lastSampleTime)) {
             success = [self.assetWriter startWriting];
-            [self.assetWriter startSessionAtSourceTime:self.lastSampleTime];
-        }
+            [self.assetWriter startSessionAtSourceTime:kCMTimeZero];
+//        }
+    }
     }
     
     if (self.didStartWritingBlock != nil) {
