@@ -59,7 +59,6 @@
             [self.assetWriter startSessionAtSourceTime:kCMTimeZero];
 //        }
     }
-    }
     
     if (self.didStartWritingBlock != nil) {
         self.didStartWritingBlock(success);
